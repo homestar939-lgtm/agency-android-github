@@ -16,6 +16,16 @@ import com.agency.app.core.data.auth.SessionState
 import com.agency.app.core.domain.model.UserRole
 import com.agency.app.core.ui.components.FullScreenLoading
 import com.agency.app.core.ui.theme.AgencyAppTheme
+import com.agency.app.feature_accountant.AccountantBalancesScreen
+import com.agency.app.feature_accountant.AccountantBalancesViewModel
+import com.agency.app.feature_accountant.AccountantStatementScreen
+import com.agency.app.feature_accountant.AccountantStatementViewModel
+import com.agency.app.feature_admin.AdminBuyersScreen
+import com.agency.app.feature_admin.AdminBuyersViewModel
+import com.agency.app.feature_admin.AdminPermissionsScreen
+import com.agency.app.feature_admin.AdminPermissionsViewModel
+import com.agency.app.feature_admin.AdminUsersScreen
+import com.agency.app.feature_admin.AdminUsersViewModel
 import com.agency.app.feature_auth.LoginScreen
 import com.agency.app.feature_auth.LoginViewModel
 import com.agency.app.feature_buyer.BuyerCartScreen
@@ -233,6 +243,43 @@ private fun AppNavHost(
                 initialBuyerId = buyerId,
                 onBack = { navController.popBackStack() },
             )
+        }
+
+        /* ------------------------------ المحاسب ------------------------------ */
+
+        composable<Route.AccountantBalances> {
+            val viewModel: AccountantBalancesViewModel = hiltViewModel()
+            AccountantBalancesScreen(
+                viewModel = viewModel,
+                onOpenStatement = { buyerId ->
+                    navController.navigate(Route.AccountantStatement(buyerId))
+                },
+            )
+        }
+
+        composable<Route.AccountantStatement> {
+            val viewModel: AccountantStatementViewModel = hiltViewModel()
+            AccountantStatementScreen(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+            )
+        }
+
+        /* ------------------------------- المدير ------------------------------- */
+
+        composable<Route.AdminUsers> {
+            val viewModel: AdminUsersViewModel = hiltViewModel()
+            AdminUsersScreen(viewModel = viewModel)
+        }
+
+        composable<Route.AdminBuyers> {
+            val viewModel: AdminBuyersViewModel = hiltViewModel()
+            AdminBuyersScreen(viewModel = viewModel)
+        }
+
+        composable<Route.AdminPermissions> {
+            val viewModel: AdminPermissionsViewModel = hiltViewModel()
+            AdminPermissionsScreen(viewModel = viewModel)
         }
     }
 }
