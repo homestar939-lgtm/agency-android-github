@@ -17,8 +17,10 @@ import androidx.compose.material.icons.filled.AccountBalanceWallet
 import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.material.icons.filled.Assessment
 import androidx.compose.material.icons.filled.Inventory2
+import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.material.icons.filled.ListAlt
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PointOfSale
 import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material.icons.filled.ReceiptLong
@@ -233,6 +235,10 @@ private fun entriesFor(role: UserRole): List<DashboardEntry> = when (role) {
     UserRole.CASHIER -> listOf(
         DashboardEntry("تحصيل", Route.CashierCollect, Icons.Filled.PointOfSale),
         DashboardEntry("الفواتير", Route.CashierInvoices, Icons.Filled.ReceiptLong),
+        DashboardEntry("إحصائياتي", Route.CashierStats, Icons.Filled.Assessment),
+        DashboardEntry("التنبيهات", Route.CashierAlerts, Icons.Filled.Warning),
+        DashboardEntry("ملفي الشخصي", Route.CashierProfile, Icons.Filled.Person),
+        DashboardEntry("التحقق الحيوي", Route.BiometricStatus, Icons.Filled.Fingerprint),
     )
     UserRole.ACCOUNTANT -> listOf(
         DashboardEntry("أرصدة المشترين", Route.AccountantBalances, Icons.Filled.AccountBalanceWallet),
@@ -256,6 +262,9 @@ private fun entriesFor(role: UserRole): List<DashboardEntry> = when (role) {
         DashboardEntry("إعدادات الوكالة", Route.AgencySettings, Icons.Filled.Storefront),
         DashboardEntry("إعدادات السند", Route.ReceiptSettings, Icons.Filled.ReceiptLong),
         DashboardEntry("حالة النسخ الاحتياطي", Route.BackupStatus, Icons.Filled.Lock),
+        DashboardEntry("إحصائياتي", Route.CashierStats, Icons.Filled.Assessment),
+        DashboardEntry("التنبيهات", Route.CashierAlerts, Icons.Filled.Warning),
+        DashboardEntry("ملفي الشخصي", Route.CashierProfile, Icons.Filled.Person),
     )
 }
 

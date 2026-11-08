@@ -57,11 +57,19 @@ import com.agency.app.feature_buyer.CartViewModel
 import com.agency.app.feature_buyer.CatalogViewModel
 import com.agency.app.feature_buyer.OrderTrackingViewModel
 import com.agency.app.feature_buyer.ProductDetailViewModel
+import com.agency.app.feature_cashier.BiometricStatusScreen
+import com.agency.app.feature_cashier.BiometricStatusViewModel
+import com.agency.app.feature_cashier.CashierAlertsScreen
+import com.agency.app.feature_cashier.CashierAlertsViewModel
 import com.agency.app.feature_cashier.CashierCollectScreen
 import com.agency.app.feature_cashier.CashierInvoiceDetailScreen
 import com.agency.app.feature_cashier.CashierInvoiceDetailViewModel
 import com.agency.app.feature_cashier.CashierInvoicesScreen
 import com.agency.app.feature_cashier.CashierInvoicesViewModel
+import com.agency.app.feature_cashier.CashierProfileScreen
+import com.agency.app.feature_cashier.CashierProfileViewModel
+import com.agency.app.feature_cashier.CashierStatsScreen
+import com.agency.app.feature_cashier.CashierStatsViewModel
 import com.agency.app.feature_cashier.CollectViewModel
 import com.agency.app.feature_home.DashboardScreen
 import com.agency.app.feature_home.DashboardViewModel
@@ -451,6 +459,38 @@ private fun AppNavHost(
         composable<Route.BackupStatus> {
             val viewModel: BackupStatusViewModel = hiltViewModel()
             BackupStatusScreen(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+            )
+        }
+
+        composable<Route.CashierProfile> {
+            val viewModel: CashierProfileViewModel = hiltViewModel()
+            CashierProfileScreen(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+            )
+        }
+
+        composable<Route.CashierStats> {
+            val viewModel: CashierStatsViewModel = hiltViewModel()
+            CashierStatsScreen(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+            )
+        }
+
+        composable<Route.CashierAlerts> {
+            val viewModel: CashierAlertsViewModel = hiltViewModel()
+            CashierAlertsScreen(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+            )
+        }
+
+        composable<Route.BiometricStatus> {
+            val viewModel: BiometricStatusViewModel = hiltViewModel()
+            BiometricStatusScreen(
                 viewModel = viewModel,
                 onBack = { navController.popBackStack() },
             )
