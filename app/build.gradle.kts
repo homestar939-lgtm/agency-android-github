@@ -58,6 +58,12 @@ android {
 
     testOptions {
         unitTests.isReturnDefaultValues = true
+        /**
+         * Robolectric يحتاج موارد Android الحقيقية لبناء قاعدة Room في اختبار
+         * الوحدة. بدون هذا السطر ينهار اختبار التكامل لعدم وجود سياق موارد،
+         * وهو ما كان سيجعل الاختبار «موجوداً» بلا أن يثبت شيئاً.
+         */
+        unitTests.isIncludeAndroidResources = true
     }
 }
 
@@ -120,6 +126,9 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
     testImplementation(libs.mockk)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.test.core)
+    testImplementation(libs.room.testing)
 
     // --- Instrumented tests ---
     androidTestImplementation(libs.androidx.test.junit)

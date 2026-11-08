@@ -14,6 +14,7 @@ import com.agency.app.core.domain.repository.BuyerRepository
 import com.agency.app.core.domain.repository.PermissionRepository
 import com.agency.app.core.domain.repository.UserRepository
 import com.agency.app.core.util.Ids
+import com.agency.app.core.util.arabicMessage
 import com.agency.app.core.util.TimeSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -58,7 +59,7 @@ data class AdminUsersUiState(
 
 @HiltViewModel
 class AdminUsersViewModel @Inject constructor(
-    userRepository: UserRepository,
+    private val userRepository: UserRepository,
     buyerRepository: BuyerRepository,
     private val authManager: AuthManager,
 ) : ViewModel() {
