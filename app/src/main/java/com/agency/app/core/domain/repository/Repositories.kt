@@ -50,8 +50,17 @@ interface UserRepository {
     ): Outcome<User>
 
     suspend fun setActive(userId: String, active: Boolean): Outcome<Unit>
-
     suspend fun changePassword(userId: String, newPassword: String): Outcome<Unit>
+
+    /**
+     * يتحقق من كلمة المرور الحالية بلا أي أثر جانبي.
+     *
+     * يلزم لسببين: تغيير كلمة المرور يتطلب تأكيد القديمة، وفحص
+     * «هل ما زال المدير على كلمة المرور الافتراضية؟» يجب أن يُقرأ من
+     * حقيقة القاعدة لا من علامة محلية في الجهاز — وإلا أعاد تثبيت التطبيق
+     * كلمة المرور الافتراضية بلا أن يطلب تغييرها.
+     */
+    suspend fun verifyPassword(userId: String, password: String): Outcome<Boolean>
 
     /** يتحقق من كلمة المرور ويحدّث وقت آخر دخول. */
     suspend fun authenticate(username: String, password: String): Outcome<User>

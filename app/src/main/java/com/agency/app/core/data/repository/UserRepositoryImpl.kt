@@ -119,6 +119,13 @@ class UserRepositoryImpl @Inject constructor(
             Outcome.Success(Unit)
         }
 
+    override suspend fun verifyPassword(userId: String, password: String): Outcome<Boolean> =
+        guarded {
+            val entity = userDao.findById(userId)
+                ?: return@guarded Outcome.Failure(AppError.NotFound("مستخدم", userId))
+            Outcome.Success(PasswordHasher.matches(password, entity.passwordHash))
+        }
+
     override suspend fun authenticate(username: String, password: String): Outcome<User> =
         guarded {
             val entity = userDao.findByUsername(username.trim())

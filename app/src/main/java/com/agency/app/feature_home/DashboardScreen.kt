@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.Assessment
 import androidx.compose.material.icons.filled.Inventory2
 import androidx.compose.material.icons.filled.ListAlt
 import androidx.compose.material.icons.filled.PointOfSale
+import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material.icons.filled.ReceiptLong
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -214,10 +215,12 @@ private fun entriesFor(role: UserRole): List<DashboardEntry> = when (role) {
         DashboardEntry("سلة الطلب", Route.BuyerCart, Icons.Filled.AddShoppingCart),
         DashboardEntry("طلبياتي", Route.BuyerOrders, Icons.Filled.ListAlt),
         DashboardEntry("كشف حسابي", Route.BuyerStatement, Icons.Filled.AccountBalanceWallet),
+        DashboardEntry("فواتيري", Route.BuyerInvoices, Icons.Filled.ReceiptLong),
     )
     UserRole.WAREHOUSE -> listOf(
         DashboardEntry("طلبيات المخزن", Route.WarehouseOrders, Icons.Filled.Inventory2),
         DashboardEntry("إدارة المنتجات", Route.WarehouseProducts, Icons.Filled.Inventory2),
+        DashboardEntry("مسح باركود", Route.WarehouseScan, Icons.Filled.QrCodeScanner),
     )
     UserRole.CASHIER -> listOf(
         DashboardEntry("تحصيل", Route.CashierCollect, Icons.Filled.PointOfSale),
@@ -236,6 +239,7 @@ private fun entriesFor(role: UserRole): List<DashboardEntry> = when (role) {
         DashboardEntry("المستخدمون", Route.AdminUsers, Icons.Filled.Assessment),
         DashboardEntry("المشترون", Route.AdminBuyers, Icons.Filled.Assessment),
         DashboardEntry("مركز الموافقات", Route.AdminPermissions, Icons.Filled.Assessment),
+        DashboardEntry("التقارير", Route.AdminReports, Icons.Filled.Assessment),
     )
 }
 

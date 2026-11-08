@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -13,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.agency.app.core.data.auth.SessionState
+import com.agency.app.core.data.sync.rememberSyncLifecycle
 import com.agency.app.core.domain.model.UserRole
 import com.agency.app.core.ui.components.FullScreenLoading
 import com.agency.app.core.ui.theme.AgencyAppTheme
@@ -24,12 +26,18 @@ import com.agency.app.feature_admin.AdminBuyersScreen
 import com.agency.app.feature_admin.AdminBuyersViewModel
 import com.agency.app.feature_admin.AdminPermissionsScreen
 import com.agency.app.feature_admin.AdminPermissionsViewModel
+import com.agency.app.feature_admin.AdminReportsScreen
+import com.agency.app.feature_admin.AdminReportsViewModel
 import com.agency.app.feature_admin.AdminUsersScreen
 import com.agency.app.feature_admin.AdminUsersViewModel
+import com.agency.app.feature_auth.ForcePasswordChangeScreen
+import com.agency.app.feature_auth.ForcePasswordChangeViewModel
 import com.agency.app.feature_auth.LoginScreen
 import com.agency.app.feature_auth.LoginViewModel
 import com.agency.app.feature_buyer.BuyerCartScreen
 import com.agency.app.feature_buyer.BuyerCatalogScreen
+import com.agency.app.feature_buyer.BuyerInvoicesScreen
+import com.agency.app.feature_buyer.BuyerInvoicesViewModel
 import com.agency.app.feature_buyer.BuyerOrderTrackingScreen
 import com.agency.app.feature_buyer.BuyerOrdersScreen
 import com.agency.app.feature_buyer.BuyerProductScreen
@@ -52,6 +60,8 @@ import com.agency.app.feature_warehouse.WarehouseOrdersScreen
 import com.agency.app.feature_warehouse.WarehouseOrdersViewModel
 import com.agency.app.feature_warehouse.WarehouseProductsScreen
 import com.agency.app.feature_warehouse.WarehouseProductsViewModel
+import com.agency.app.feature_warehouse.WarehouseScanScreen
+import com.agency.app.feature_warehouse.WarehouseScanViewModel
 
 /**
  * جذر التطبيق.
@@ -65,6 +75,15 @@ fun AgencyRoot(
 ) {
     val loginViewModel: LoginViewModel = hiltViewModel()
     val session by loginViewModel.session.collectAsState()
+    val mustChangePassword by loginViewModel.mustChangePassword.collectAsState()
+
+    /*
+     * ربط قناة المزامنة بالجلسة يقع هنا لا في الشاشات: القناة تُفتح مرة واحدة
+     * لكل جلسة. `remember` يمنع تكرار الربط عند إعادة التركيب.
+     */
+    val syncLifecycle = rememberSyncLifecycle()
+    LaunchedEffect(syncLifecycle) { syncLifecycle.bind() }
+
     val role = (session as? SessionState.Active)?.user?.role ?: UserRole.BUYER
 
     AgencyAppTheme(role = role) {
@@ -75,11 +94,24 @@ fun AgencyRoot(
             when (val state = session) {
                 SessionState.Loading -> FullScreenLoading()
                 SessionState.SignedOut -> LoginHost(loginViewModel)
-                is SessionState.Active -> AppNavHost(
-                    navController = navController,
-                    userName = state.user.displayName,
-                    role = state.user.role,
-                )
+                is SessionState.Active -> {
+                    /*
+                     * بوابة تغيير كلمة المرور تسبق المخطط كله، لا تُسجَّل كمسار
+                     * داخله. السبب: لو كانت مساراً لأمكن تجاوزها بالرجوع، ولو
+                     * كانت شاشة عادية لكان ترتيب `when` وحده هو الحماية.
+                     * هنا لا يوجد مخطط أصلاً قبل التغيير، فلا يوجد ما يُتجاوز.
+                     */
+                    if (mustChangePassword) {
+                        val forceViewModel: ForcePasswordChangeViewModel = hiltViewModel()
+                        ForcePasswordChangeScreen(viewModel = forceViewModel)
+                    } else {
+                        AppNavHost(
+                            navController = navController,
+                            userName = state.user.displayName,
+                            role = state.user.role,
+                        )
+                    }
+                }
             }
         }
     }
@@ -186,6 +218,14 @@ private fun AppNavHost(
 
         /* ------------------------------ المخزن ------------------------------ */
 
+        composable<Route.BuyerInvoices> {
+            val viewModel: BuyerInvoicesViewModel = hiltViewModel()
+            BuyerInvoicesScreen(
+                viewModel = viewModel,
+                onOpenStatement = { navController.navigate(Route.BuyerStatement) },
+            )
+        }
+
         composable<Route.WarehouseOrders> {
             val viewModel: WarehouseOrdersViewModel = hiltViewModel()
             WarehouseOrdersScreen(
@@ -205,6 +245,17 @@ private fun AppNavHost(
         composable<Route.WarehouseProducts> {
             val viewModel: WarehouseProductsViewModel = hiltViewModel()
             WarehouseProductsScreen(viewModel = viewModel)
+        }
+
+        composable<Route.WarehouseScan> {
+            val viewModel: WarehouseScanViewModel = hiltViewModel()
+            WarehouseScanScreen(
+                viewModel = viewModel,
+                onOpenOrder = { orderId ->
+                    navController.navigate(Route.WarehouseOrderDetail(orderId))
+                },
+                onOpenProducts = { navController.navigate(Route.WarehouseProducts) },
+            )
         }
 
         /* --------------------------- أمين الصندوق --------------------------- */
@@ -280,6 +331,11 @@ private fun AppNavHost(
         composable<Route.AdminPermissions> {
             val viewModel: AdminPermissionsViewModel = hiltViewModel()
             AdminPermissionsScreen(viewModel = viewModel)
+        }
+
+        composable<Route.AdminReports> {
+            val viewModel: AdminReportsViewModel = hiltViewModel()
+            AdminReportsScreen(viewModel = viewModel)
         }
     }
 }

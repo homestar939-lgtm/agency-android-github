@@ -19,6 +19,17 @@ android {
         versionName = "1.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
+
+        /*
+         * عنوان قناة المزامنة.
+         *
+         * فارغ افتراضياً بقصد: تطبيق بلا خادم يجب أن يعمل بالكامل من Room،
+         * ولا يجوز أن يُخترع عنوان وهمي فتصير كل محاولة اتصال فاشلة ضجيجاً
+         * في السجلات. يُمرَّر عند البناء:
+         *   ./gradlew assembleDebug -PsyncWsUrl=wss://example/ws
+         */
+        val syncWsUrl = (project.findProperty("syncWsUrl") as String?).orEmpty()
+        buildConfigField("String", "SYNC_WS_URL", "\"$syncWsUrl\"")
     }
 
     buildFeatures {
@@ -120,6 +131,13 @@ dependencies {
     implementation(libs.mlkit.barcode)
     implementation(libs.androidx.biometric)
     implementation(libs.androidx.fragment.ktx)
+    /**
+     * تخزين مُشفَّر للجلسة. يُستعمل في [com.agency.app.core.data.auth.AuthManager]
+     * بدل `SharedPreferences` العادية: معرّف المستخدم الحالي هو ما يمنح
+     * الجلسة عند إعادة التشغيل، وتسريبه على جهاز مروّت يعني انتحال دور المدير
+     * بلا كلمة مرور. التشفير هنا ليس ترفاً بل هو ما يجعل الجلسة المحفوظة آمنة.
+     */
+    implementation(libs.androidx.security.crypto)
 
     // --- Unit tests ---
     testImplementation(libs.junit4)

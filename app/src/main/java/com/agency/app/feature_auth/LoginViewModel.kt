@@ -42,6 +42,14 @@ class LoginViewModel @Inject constructor(
 
     val session: StateFlow<SessionState> = authManager.session
 
+    /**
+     * هل يجب إجبار المستخدم الحالي على تغيير كلمة مروره؟
+     *
+     * يُمرَّر كما هو من [AuthManager] بلا حساب محلي، لأن الحقيقة في القاعدة:
+     * علامة محلية تُمسح مع بيانات التطبيق فتُسقط المطلب مع بقاء الكلمة الافتراضية.
+     */
+    val mustChangePassword: StateFlow<Boolean> = authManager.mustChangePassword
+
     private var bootstrapped = false
 
     /**
@@ -95,9 +103,9 @@ class LoginViewModel @Inject constructor(
 
     companion object {
         /**
-         * كلمة مرور المدير الأولية. تُغيَّر إجبارياً من شاشة الإعدادات بعد أول دخول،
-         * ولذلك هي ثابت واحد مرئي بدل قيمة مخفية غير قابلة للتغيير.
+         * كلمة مرور المدير الأولية — تُقرأ من [AuthManager] لا تُكرَّر هنا،
+         * حتى لا يوجد رقمان لسر واحد يتباعدان عند التعديل.
          */
-        const val DEFAULT_ADMIN_PASSWORD = "Admin@2024"
+        const val DEFAULT_ADMIN_PASSWORD = AuthManager.DEFAULT_ADMIN_PASSWORD
     }
 }
