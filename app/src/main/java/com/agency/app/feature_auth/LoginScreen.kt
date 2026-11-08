@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -59,6 +60,10 @@ fun LoginScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                // imePadding قبل verticalScroll: حين يفتح لوحة المفاتيح كان زر
+                // الدخول يزحف فوق حقل كلمة المرور ويغطيه. الحشو يجعل المساحة
+                // القابلة للتمرير تنكمش مع اللوحة، فيبقى الزر تحت الحقل دائماً.
+                .imePadding()
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 24.dp, vertical = 48.dp),
             horizontalAlignment = Alignment.CenterHorizontally,

@@ -16,6 +16,7 @@ import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.AccountBalanceWallet
 import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.material.icons.filled.Assessment
+import androidx.compose.material.icons.filled.Dashboard
 import androidx.compose.material.icons.filled.Inventory2
 import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.material.icons.filled.ListAlt
@@ -45,6 +46,7 @@ import com.agency.app.core.domain.model.UserRole
 import com.agency.app.core.ui.components.AppCard
 import com.agency.app.core.ui.components.CurrencyText
 import com.agency.app.core.ui.components.InfoRow
+import com.agency.app.core.ui.components.HeroHeader
 import com.agency.app.core.ui.components.SectionHeader
 import com.agency.app.core.ui.navigation.Route
 import com.agency.app.core.ui.theme.LocalAgencyAccents
@@ -74,32 +76,23 @@ fun DashboardScreen(
             .padding(horizontal = 16.dp, vertical = 20.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Column {
-                Text(
-                    text = greeting(role),
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface,
-                )
-                Text(
-                    text = "$userName — ${roleLabel(role)}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-            IconButton(onClick = onSignOut) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.Logout,
-                    contentDescription = "خروج",
-                    tint = MaterialTheme.colorScheme.error,
-                )
-            }
-        }
+        // رأس متدرّج بلون الدور بدل صفّ نصّي مسطّح. اللون يأتي من
+        // LocalAgencyAccents، فأي دور جديد يرث هويته بلا تعديل هنا.
+        HeroHeader(
+            title = greeting(role),
+            subtitle = "$userName — ${roleLabel(role)}",
+            icon = Icons.Filled.Dashboard,
+            accent = accents.primary,
+            trailing = {
+                IconButton(onClick = onSignOut) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.Logout,
+                        contentDescription = "خروج",
+                        tint = MaterialTheme.colorScheme.onPrimary,
+                    )
+                }
+            },
+        )
 
         when (role) {
             UserRole.BUYER -> Unit

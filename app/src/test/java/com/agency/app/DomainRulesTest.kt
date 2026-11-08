@@ -146,13 +146,13 @@ class DomainRulesTest {
         // total    = 240
         // commission = 3% من 240 = 7.20
         // grand    = 247.20
-        val subtotalCents = 20000 + 5000
-        val discountCents = 1000
+        val subtotalCents = 20000L + 5000L
+        val discountCents = 1000L
         val totalCents = subtotalCents - discountCents
         val commissionCents = Money(totalCents).percent(3).cents
-        assertEquals(24000, totalCents)
-        assertEquals(720, commissionCents)
-        assertEquals(24720, totalCents + commissionCents)
+        assertEquals(24000L, totalCents)
+        assertEquals(720L, commissionCents)
+        assertEquals(24720L, totalCents + commissionCents)
     }
 
     @Test

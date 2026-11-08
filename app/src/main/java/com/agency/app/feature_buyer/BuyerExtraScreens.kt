@@ -35,12 +35,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.agency.app.core.ui.arabic
+import com.agency.app.core.ui.components.ShimmerListScreen
 import com.agency.app.core.ui.components.AppCard
 import com.agency.app.core.ui.components.BadgePill
 import com.agency.app.core.ui.components.CurrencyText
 import com.agency.app.core.ui.components.EmptyState
 import com.agency.app.core.ui.components.InfoRow
-import com.agency.app.core.ui.components.LoadingShimmer
 import com.agency.app.core.ui.components.SectionHeader
 import com.agency.app.core.ui.components.formatted
 import com.agency.app.core.ui.theme.LocalAgencyAccents
@@ -71,7 +71,7 @@ fun BuyerProfileScreen(
         },
     ) { padding ->
         if (state.isLoading) {
-            Box(Modifier.fillMaxSize().padding(padding)) { LoadingShimmer() }
+            ShimmerListScreen(modifier = Modifier.padding(padding))
             return@Scaffold
         }
         Column(
@@ -210,7 +210,7 @@ fun BuyerArchiveScreen(
         },
     ) { padding ->
         when {
-            state.isLoading -> Box(Modifier.fillMaxSize().padding(padding)) { LoadingShimmer() }
+            state.isLoading -> ShimmerListScreen(modifier = Modifier.padding(padding))
             !state.isLinked -> EmptyState(
                 title = "حسابك غير مربوط",
                 description = "لا يمكن عرض أرشيف بلا سجل مشترٍ مرتبط بحسابك.",
