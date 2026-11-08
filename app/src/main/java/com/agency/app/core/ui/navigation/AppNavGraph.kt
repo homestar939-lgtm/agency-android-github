@@ -1,9 +1,7 @@
 package com.agency.app.core.ui.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -20,6 +18,16 @@ import com.agency.app.core.ui.components.FullScreenLoading
 import com.agency.app.core.ui.theme.AgencyAppTheme
 import com.agency.app.feature_auth.LoginScreen
 import com.agency.app.feature_auth.LoginViewModel
+import com.agency.app.feature_buyer.BuyerCartScreen
+import com.agency.app.feature_buyer.BuyerCatalogScreen
+import com.agency.app.feature_buyer.BuyerOrderTrackingScreen
+import com.agency.app.feature_buyer.BuyerOrdersScreen
+import com.agency.app.feature_buyer.BuyerProductScreen
+import com.agency.app.feature_buyer.BuyerStatementScreen
+import com.agency.app.feature_buyer.CartViewModel
+import com.agency.app.feature_buyer.CatalogViewModel
+import com.agency.app.feature_buyer.OrderTrackingViewModel
+import com.agency.app.feature_buyer.ProductDetailViewModel
 import com.agency.app.feature_home.DashboardScreen
 import com.agency.app.feature_home.DashboardViewModel
 
@@ -27,8 +35,7 @@ import com.agency.app.feature_home.DashboardViewModel
  * جذر التطبيق.
  *
  * الشاشة الأولى تُقرَّر من الجلسة لا من ترتيب المسارات: بلا جلسة نعرض الدخول،
- * وبجلسة نعرض لوحة الدور. أي محاولة للوصول إلى مسار محمي بلا جلسة تُعاد
- * إلى الدخول، وهي حماية على مستوى التنقل لا على مستوى الزر فقط.
+ * وبجلسة نعرض مخطط الشاشات المحمية. الحماية على مستوى التنقل لا على مستوى الزر.
  */
 @Composable
 fun AgencyRoot(
@@ -36,7 +43,6 @@ fun AgencyRoot(
 ) {
     val loginViewModel: LoginViewModel = hiltViewModel()
     val session by loginViewModel.session.collectAsState()
-
     val role = (session as? SessionState.Active)?.user?.role ?: UserRole.BUYER
 
     AgencyAppTheme(role = role) {
@@ -47,10 +53,10 @@ fun AgencyRoot(
             when (val state = session) {
                 SessionState.Loading -> FullScreenLoading()
                 SessionState.SignedOut -> LoginHost(loginViewModel)
-                is SessionState.Active -> DashboardHost(
+                is SessionState.Active -> AppNavHost(
                     navController = navController,
                     userName = state.user.displayName,
-                    role = state.user.role
+                    role = state.user.role,
                 )
             }
         }
@@ -69,29 +75,87 @@ private fun LoginHost(viewModel: LoginViewModel) {
     )
 }
 
+/**
+ * مخطط الشاشات المحمية.
+ *
+ * كل شاشة تُجلب لها ViewModel الخاصة عبر `hiltViewModel()` فتُحقن
+ * مستودعاتها تلقائياً، ولا تُنشأ أي تبعية يدوياً في الواجهة.
+ */
 @Composable
-private fun DashboardHost(
+private fun AppNavHost(
     navController: NavHostController,
     userName: String,
     role: UserRole,
 ) {
-    Scaffold { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = Route.Dashboard,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-        ) {
-            composable<Route.Dashboard> {
-                val dashboardViewModel: DashboardViewModel = hiltViewModel()
-                DashboardScreen(
-                    viewModel = dashboardViewModel,
-                    role = role,
-                    userName = userName,
-                    onSignOut = { dashboardViewModel.signOut() }
-                )
-            }
+    NavHost(
+        navController = navController,
+        startDestination = Route.Dashboard,
+        modifier = Modifier.fillMaxSize(),
+    ) {
+        composable<Route.Dashboard> {
+            val dashboardViewModel: DashboardViewModel = hiltViewModel()
+            DashboardScreen(
+                viewModel = dashboardViewModel,
+                role = role,
+                userName = userName,
+                onSignOut = {
+                    dashboardViewModel.signOut()
+                    navController.popBackStack(Route.Dashboard, inclusive = true)
+                },
+                onNavigate = { destination -> navController.navigate(destination) },
+            )
+        }
+
+        /* ------------------------------ المشتري ------------------------------ */
+
+        composable<Route.BuyerCatalog> {
+            val viewModel: CatalogViewModel = hiltViewModel()
+            BuyerCatalogScreen(
+                viewModel = viewModel,
+                onOpenProduct = { productId -> navController.navigate(Route.BuyerProduct(productId)) },
+                onOpenCart = { navController.navigate(Route.BuyerCart) },
+            )
+        }
+
+        composable<Route.BuyerProduct> {
+            val viewModel: ProductDetailViewModel = hiltViewModel()
+            BuyerProductScreen(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+                onOpenCart = { navController.navigate(Route.BuyerCart) },
+            )
+        }
+
+        composable<Route.BuyerCart> {
+            val viewModel: CartViewModel = hiltViewModel()
+            BuyerCartScreen(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+                onCreated = { orderId ->
+                    navController.navigate(Route.BuyerOrderDetail(orderId)) {
+                        popUpTo(Route.BuyerCart) { inclusive = true }
+                    }
+                },
+            )
+        }
+
+        composable<Route.BuyerOrders> {
+            BuyerOrdersScreen(
+                viewModel = hiltViewModel(),
+                onOpenOrder = { orderId -> navController.navigate(Route.BuyerOrderDetail(orderId)) },
+            )
+        }
+
+        composable<Route.BuyerOrderDetail> {
+            val viewModel: OrderTrackingViewModel = hiltViewModel()
+            BuyerOrderTrackingScreen(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+            )
+        }
+
+        composable<Route.BuyerStatement> {
+            BuyerStatementScreen(viewModel = hiltViewModel())
         }
     }
 }
