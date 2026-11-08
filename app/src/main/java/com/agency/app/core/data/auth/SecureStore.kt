@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -22,7 +23,7 @@ import javax.inject.Singleton
  * فلا يبقى الانحدار سراً في الكود.
  */
 @Singleton
-class SecureStore @Inject constructor(context: Context) {
+class SecureStore @Inject constructor(@ApplicationContext context: Context) {
 
     private val prefs: SharedPreferences
 
