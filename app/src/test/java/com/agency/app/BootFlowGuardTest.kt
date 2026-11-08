@@ -57,7 +57,7 @@ class BootFlowGuardTest {
         db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java)
             .allowMainThreadQueries()
             .build()
-        userRepository = UserRepositoryImpl(db)
+        userRepository = UserRepositoryImpl(db.userDao())
     }
 
     @After
