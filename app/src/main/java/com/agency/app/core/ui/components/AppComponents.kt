@@ -208,9 +208,10 @@ fun BadgePill(
     text: String,
     color: Color,
     modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
 ) {
     Surface(
-        modifier = modifier,
+        modifier = if (onClick != null) modifier.clickable { onClick() } else modifier,
         shape = RoundedCornerShape(50),
         color = color.copy(alpha = 0.14f),
         contentColor = color,

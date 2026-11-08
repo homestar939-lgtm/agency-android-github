@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.agency.app.core.domain.model.Invoice
 import com.agency.app.core.domain.model.InvoiceStatus
+import com.agency.app.core.ui.arabic
 import com.agency.app.core.ui.components.AppCard
 import com.agency.app.core.ui.components.BadgePill
 import com.agency.app.core.ui.components.CurrencyText
@@ -191,11 +192,4 @@ private fun InvoiceRow(invoice: Invoice) {
     }
 }
 
-/** تسمية عربية لحالة الفاتورة — تُستخدم هنا وفي شاشة الصندوق لاحقاً. */
-internal fun InvoiceStatus.arabic(): String = when (this) {
-    InvoiceStatus.DRAFT -> "مسودّة"
-    InvoiceStatus.PENDING_APPROVAL -> "بانتظار الاعتماد"
-    InvoiceStatus.APPROVED -> "معتمدة"
-    InvoiceStatus.REJECTED -> "مرفوضة"
-    InvoiceStatus.ARCHIVED -> "مؤرشفة"
-}
+/** تسمية عربية لحالة الفاتورة — نُقلت إلى `core.ui.Labels` كمصدر واحد. */

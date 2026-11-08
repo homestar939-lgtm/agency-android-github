@@ -53,7 +53,19 @@ sealed interface Route {
     @Serializable
     data object WarehouseScan : Route
 
-    /* ---------------- أمين الصندوق ---------------- */
+    /* شاشات المخزن المكمّلة: كلها تقرأ من نفس المستودعات، ولا تنشئ مصدر رصيد ثانياً. */
+    @Serializable
+    data object WarehouseStats : Route
+    @Serializable
+    data object StockMovement : Route
+    @Serializable
+    data object StockAlerts : Route
+    @Serializable
+    data object WarehouseInvoices : Route
+    @Serializable
+    data class InvoiceViewer(val invoiceId: String) : Route
+
+/* ---------------- أمين الصندوق ---------------- */
     @Serializable
     data object CashierInvoices : Route
 

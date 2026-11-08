@@ -13,6 +13,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.agency.app.core.data.auth.SessionState
 import com.agency.app.core.data.sync.rememberSyncLifecycle
 import com.agency.app.core.domain.model.UserRole
@@ -265,6 +266,53 @@ private fun AppNavHost(
                     navController.navigate(Route.WarehouseOrderDetail(orderId))
                 },
                 onOpenProducts = { navController.navigate(Route.WarehouseProducts) },
+            )
+        }
+
+        /* ---------- شاشات المخزن المكمّلة (المرحلة ب) ---------- */
+        composable<Route.WarehouseStats> {
+            val viewModel: WarehouseStatsViewModel = hiltViewModel()
+            WarehouseStatsScreen(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+            )
+        }
+        composable<Route.StockMovement> {
+            val viewModel: StockMovementViewModel = hiltViewModel()
+            StockMovementScreen(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+            )
+        }
+        composable<Route.StockAlerts> {
+            val viewModel: StockAlertsViewModel = hiltViewModel()
+            StockAlertsScreen(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+            )
+        }
+        composable<Route.WarehouseInvoices> {
+            val viewModel: WarehouseInvoicesViewModel = hiltViewModel()
+            WarehouseInvoicesScreen(
+                viewModel = viewModel,
+                onOpenInvoice = { invoiceId ->
+                    navController.navigate(Route.InvoiceViewer(invoiceId))
+                },
+                onBack = { navController.popBackStack() },
+            )
+        }
+        composable<Route.InvoiceViewer> { entry ->
+            /*
+             * المعرّف يُقرأ من `toRoute()` لا من وسيط نصي: المسارات هنا
+             * `@Serializable`، وقراءة الوسيط يدوياً كانت ستنجح مرة وتنكسر
+             * صامتةً عند تغيير التوقيع.
+             */
+            val route = entry.toRoute<Route.InvoiceViewer>()
+            val viewModel: InvoiceViewerViewModel = hiltViewModel()
+            InvoiceViewerScreen(
+                invoiceId = route.invoiceId,
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
             )
         }
 
