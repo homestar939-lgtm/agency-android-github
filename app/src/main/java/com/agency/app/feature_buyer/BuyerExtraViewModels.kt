@@ -75,7 +75,7 @@ class BuyerProfileViewModel @Inject constructor(
                 val buyerId = (session as? SessionState.Active)?.user?.buyerId
                 if (buyerId == null) {
                     balance.value = null
-                    return@collect
+                    return@collectLatest
                 }
                 buyerRepository.observeBalance(buyerId).collect { fresh ->
                     balance.value = fresh
