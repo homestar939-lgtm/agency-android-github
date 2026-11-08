@@ -18,9 +18,12 @@ import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.material.icons.filled.Assessment
 import androidx.compose.material.icons.filled.Inventory2
 import androidx.compose.material.icons.filled.ListAlt
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.PointOfSale
 import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material.icons.filled.ReceiptLong
+import androidx.compose.material.icons.filled.Shield
+import androidx.compose.material.icons.filled.Storefront
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -248,6 +251,11 @@ private fun entriesFor(role: UserRole): List<DashboardEntry> = when (role) {
         DashboardEntry("فواتير المخزن", Route.WarehouseInvoices, Icons.Filled.ReceiptLong),
         DashboardEntry("تنبيهات المخزون", Route.StockAlerts, Icons.Filled.Warning),
         DashboardEntry("إحصائيات المخزن", Route.WarehouseStats, Icons.Filled.Assessment),
+        DashboardEntry("مصفوفة الصلاحيات", Route.AdminPermissionMatrix, Icons.Filled.Shield),
+        DashboardEntry("سجل التدقيق", Route.AuditLog, Icons.Filled.ListAlt),
+        DashboardEntry("إعدادات الوكالة", Route.AgencySettings, Icons.Filled.Storefront),
+        DashboardEntry("إعدادات السند", Route.ReceiptSettings, Icons.Filled.ReceiptLong),
+        DashboardEntry("حالة النسخ الاحتياطي", Route.BackupStatus, Icons.Filled.Lock),
     )
 }
 

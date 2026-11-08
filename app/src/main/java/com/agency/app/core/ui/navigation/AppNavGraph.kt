@@ -25,12 +25,22 @@ import com.agency.app.feature_accountant.AccountantStatementScreen
 import com.agency.app.feature_accountant.AccountantStatementViewModel
 import com.agency.app.feature_admin.AdminBuyersScreen
 import com.agency.app.feature_admin.AdminBuyersViewModel
+import com.agency.app.feature_admin.AdminPermissionMatrixScreen
+import com.agency.app.feature_admin.AdminPermissionMatrixViewModel
 import com.agency.app.feature_admin.AdminPermissionsScreen
 import com.agency.app.feature_admin.AdminPermissionsViewModel
 import com.agency.app.feature_admin.AdminReportsScreen
 import com.agency.app.feature_admin.AdminReportsViewModel
 import com.agency.app.feature_admin.AdminUsersScreen
 import com.agency.app.feature_admin.AdminUsersViewModel
+import com.agency.app.feature_admin.AgencySettingsScreen
+import com.agency.app.feature_admin.AgencySettingsViewModel
+import com.agency.app.feature_admin.AuditLogScreen
+import com.agency.app.feature_admin.AuditLogViewModel
+import com.agency.app.feature_admin.BackupStatusScreen
+import com.agency.app.feature_admin.BackupStatusViewModel
+import com.agency.app.feature_admin.ReceiptSettingsScreen
+import com.agency.app.feature_admin.ReceiptSettingsViewModel
 import com.agency.app.feature_auth.ForcePasswordChangeScreen
 import com.agency.app.feature_auth.ForcePasswordChangeViewModel
 import com.agency.app.feature_auth.LoginScreen
@@ -404,6 +414,46 @@ private fun AppNavHost(
         composable<Route.AdminReports> {
             val viewModel: AdminReportsViewModel = hiltViewModel()
             AdminReportsScreen(viewModel = viewModel)
+        }
+
+        composable<Route.AdminPermissionMatrix> {
+            val viewModel: AdminPermissionMatrixViewModel = hiltViewModel()
+            AdminPermissionMatrixScreen(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+            )
+        }
+
+        composable<Route.AgencySettings> {
+            val viewModel: AgencySettingsViewModel = hiltViewModel()
+            AgencySettingsScreen(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+            )
+        }
+
+        composable<Route.ReceiptSettings> {
+            val viewModel: ReceiptSettingsViewModel = hiltViewModel()
+            ReceiptSettingsScreen(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+            )
+        }
+
+        composable<Route.AuditLog> {
+            val viewModel: AuditLogViewModel = hiltViewModel()
+            AuditLogScreen(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+            )
+        }
+
+        composable<Route.BackupStatus> {
+            val viewModel: BackupStatusViewModel = hiltViewModel()
+            BackupStatusScreen(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+            )
         }
     }
 }

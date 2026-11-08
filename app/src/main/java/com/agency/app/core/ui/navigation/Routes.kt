@@ -97,4 +97,14 @@ sealed interface Route {
 
     @Serializable
     data object AdminReports : Route
+    @Serializable
+    data object AdminPermissionMatrix : Route
+    @Serializable
+    data object AgencySettings : Route
+    @Serializable
+    data object ReceiptSettings : Route
+    @Serializable
+    data object AuditLog : Route
+    @Serializable
+    data object BackupStatus : Route
 }
