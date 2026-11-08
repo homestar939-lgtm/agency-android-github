@@ -211,11 +211,34 @@ class OrderFlowIntegrationTest {
 
         val statement = buyerRepository.observeStatement(buyer.id).first()
         assertNotNull(statement)
-        assertTrue("كشف الحساب فارغ", statement.isNotEmpty())
+        assertEquals("كشف الحساب يجب أن يحمل الفاتورة وسندي القبض", 3, statement.size)
 
-        // آخر سطر في الكشف يجب أن ينتهي برصيد صفر، لا أن يعيد العرض حسابه.
-        val lastEntry = statement.last()
-        assertEquals(Money.ZERO, lastEntry.balanceAfter)
+        /*
+         * الكشف يُعاد مرتّباً من الأحدث للأقدم للعرض، والترتيب بين حركتين
+         * متزامنتين غير مضمون. لذلك لا نثبت على موضع واحد، بل على مجموعة
+         * الأرصدة نفسها وعلى مجاميع المدين والدائن:
+         *   - الفاتورة  (1260 دائن لنا)  ← الرصيد 1260
+         *   - السند الأول (260)          ← الرصيد 1000
+         *   - السند الثاني (1000)        ← الرصيد 0
+         * المجموعة {0, 1000, 1260} صحيحة أياً كان ترتيب الحركات المتزامنة.
+         */
+        val balances = statement.map { it.balanceAfter.cents }.toSet()
+        assertEquals(
+            "سلسلة الأرصدة في الكشف غير متسقة: $balances",
+            setOf(0L, Money.fromMajor(1000).cents, Money.fromMajor(1260).cents),
+            balances
+        )
+
+        // المجاميع يجب أن تتوازن تماماً: لا رصيد معلّق ولا تحصيل زائد.
+        val totalDebit = statement.fold(Money.ZERO) { acc, e -> acc + e.debit }
+        val totalCredit = statement.fold(Money.ZERO) { acc, e -> acc + e.credit }
+        assertEquals(Money.fromMajor(1260), totalDebit)
+        assertEquals(Money.fromMajor(1260), totalCredit)
+        assertEquals(
+            "المجاميع لا تتوازن، أي أن هناك رصيداً مفقوداً",
+            Money.ZERO,
+            totalDebit - totalCredit
+        )
 
         // مجموع السندات يساوي إجمالي الفاتورة: لا رصيد معلّق ولا زيادة.
         val totalCollected = receiptRepository.totalCollected(buyer.id)
