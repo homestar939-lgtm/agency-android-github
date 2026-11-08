@@ -12,7 +12,7 @@ import com.agency.app.core.data.repository.ReceiptRepositoryImpl
 import com.agency.app.core.data.repository.UserRepositoryImpl
 import com.agency.app.core.domain.model.InvoiceStatus
 import com.agency.app.core.domain.model.Money
-import com.agency.app.core.domain.model.NewOrderLine
+import com.agency.app.core.domain.repository.NewOrderLine
 import com.agency.app.core.domain.model.OrderStatus
 import com.agency.app.core.domain.model.Outcome
 import com.agency.app.core.domain.model.PaymentMethod
