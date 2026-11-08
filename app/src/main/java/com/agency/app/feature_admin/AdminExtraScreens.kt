@@ -39,13 +39,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.agency.app.core.ui.arabic
+import com.agency.app.core.ui.components.ShimmerListScreen
 import com.agency.app.core.ui.components.AppButton
 import com.agency.app.core.ui.components.AppCard
 import com.agency.app.core.ui.components.AppTextField
 import com.agency.app.core.ui.components.BadgePill
 import com.agency.app.core.ui.components.EmptyState
 import com.agency.app.core.ui.components.InfoRow
-import com.agency.app.core.ui.components.LoadingShimmer
 import com.agency.app.core.ui.components.SectionHeader
 import com.agency.app.core.ui.theme.LocalAgencyAccents
 import com.agency.app.core.util.formattedDateTime
@@ -88,7 +88,7 @@ fun AdminPermissionMatrixScreen(
         },
     ) { padding ->
         if (state.isLoading) {
-            Box(Modifier.fillMaxSize().padding(padding)) { LoadingShimmer() }
+            ShimmerListScreen(modifier = Modifier.padding(padding))
             return@Scaffold
         }
         LazyColumn(
@@ -483,7 +483,7 @@ fun AuditLogScreen(
             }
 
             if (state.isLoading) {
-                Box(Modifier.fillMaxSize()) { LoadingShimmer() }
+                ShimmerListScreen()
                 return@Column
             }
             if (state.isEmpty) {
@@ -563,7 +563,7 @@ fun BackupStatusScreen(
         },
     ) { padding ->
         if (state.isLoading) {
-            Box(Modifier.fillMaxSize().padding(padding)) { LoadingShimmer() }
+            ShimmerListScreen(modifier = Modifier.padding(padding))
             return@Scaffold
         }
         LazyColumn(
