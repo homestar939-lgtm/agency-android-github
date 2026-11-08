@@ -65,7 +65,9 @@ class DomainRulesTest {
         assertNull(Money.fromString("abc"))
         assertNull(Money.fromString(""))
         // الفاصلة العربية تُقبل كمزيّة عشرية
-        assertEquals(1250, Money.fromString("12,50")?.cents)
+        // اللاحقة L مقصودة: النتيجة Long? ولا يوسّع المترجم حرفاً صحيحاً
+        // إلى Long داخل مقارنة قابلة للعدم، فيقارن Int بـ Long ويفشل.
+        assertEquals(1250L, Money.fromString("12,50")?.cents)
     }
 
     /* ------------------------- الأدوار ------------------------- */
