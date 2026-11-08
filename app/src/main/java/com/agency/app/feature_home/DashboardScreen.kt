@@ -222,6 +222,8 @@ private fun entriesFor(role: UserRole): List<DashboardEntry> = when (role) {
         DashboardEntry("طلبياتي", Route.BuyerOrders, Icons.Filled.ListAlt),
         DashboardEntry("كشف حسابي", Route.BuyerStatement, Icons.Filled.AccountBalanceWallet),
         DashboardEntry("فواتيري", Route.BuyerInvoices, Icons.Filled.ReceiptLong),
+        DashboardEntry("ملفي وذمّتي", Route.BuyerProfile, Icons.Filled.Person),
+        DashboardEntry("الأرشيف", Route.BuyerArchive, Icons.Filled.ListAlt),
     )
     UserRole.WAREHOUSE -> listOf(
         DashboardEntry("طلبيات المخزن", Route.WarehouseOrders, Icons.Filled.Inventory2),

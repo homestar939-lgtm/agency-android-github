@@ -115,4 +115,8 @@ sealed interface Route {
     data object CashierAlerts : Route
     @Serializable
     data object BiometricStatus : Route
+    @Serializable
+    data object BuyerProfile : Route
+    @Serializable
+    data object BuyerArchive : Route
 }

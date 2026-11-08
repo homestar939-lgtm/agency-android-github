@@ -45,10 +45,14 @@ import com.agency.app.feature_auth.ForcePasswordChangeScreen
 import com.agency.app.feature_auth.ForcePasswordChangeViewModel
 import com.agency.app.feature_auth.LoginScreen
 import com.agency.app.feature_auth.LoginViewModel
+import com.agency.app.feature_buyer.BuyerArchiveScreen
+import com.agency.app.feature_buyer.BuyerArchiveViewModel
 import com.agency.app.feature_buyer.BuyerCartScreen
 import com.agency.app.feature_buyer.BuyerCatalogScreen
 import com.agency.app.feature_buyer.BuyerInvoicesScreen
 import com.agency.app.feature_buyer.BuyerInvoicesViewModel
+import com.agency.app.feature_buyer.BuyerProfileScreen
+import com.agency.app.feature_buyer.BuyerProfileViewModel
 import com.agency.app.feature_buyer.BuyerOrderTrackingScreen
 import com.agency.app.feature_buyer.BuyerOrdersScreen
 import com.agency.app.feature_buyer.BuyerProductScreen
@@ -491,6 +495,22 @@ private fun AppNavHost(
         composable<Route.BiometricStatus> {
             val viewModel: BiometricStatusViewModel = hiltViewModel()
             BiometricStatusScreen(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+            )
+        }
+
+        composable<Route.BuyerProfile> {
+            val viewModel: BuyerProfileViewModel = hiltViewModel()
+            BuyerProfileScreen(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+            )
+        }
+
+        composable<Route.BuyerArchive> {
+            val viewModel: BuyerArchiveViewModel = hiltViewModel()
+            BuyerArchiveScreen(
                 viewModel = viewModel,
                 onBack = { navController.popBackStack() },
             )
