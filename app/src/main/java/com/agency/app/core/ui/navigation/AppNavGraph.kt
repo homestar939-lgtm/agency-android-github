@@ -84,6 +84,16 @@ fun AgencyRoot(
     val syncLifecycle = rememberSyncLifecycle()
     LaunchedEffect(syncLifecycle) { syncLifecycle.bind() }
 
+    /*
+     * الإقلاع يُنفَّذ من الجذر لا من شاشة الدخول.
+     *
+     * كان مربوطاً بـ`LoginScreen`، لكن تلك الشاشة لا تُركَّب إلا بعد أن تصبح
+     * الحالة `SignedOut`، والحالة تبدأ `Loading` ولا تخرج منها إلا بـ`bootstrap`.
+     * أي أن كل طرف كان ينتظر الآخر: دائرة تحميل دائمة عند كل تشغيل.
+     * الزرع عند الجذر يقطع الانتظار الدائري.
+     */
+    LaunchedEffect(loginViewModel) { loginViewModel.bootstrap() }
+
     val role = (session as? SessionState.Active)?.user?.role ?: UserRole.BUYER
 
     AgencyAppTheme(role = role) {

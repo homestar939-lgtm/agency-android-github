@@ -60,7 +60,13 @@ class LoginViewModel @Inject constructor(
         if (bootstrapped) return
         bootstrapped = true
         viewModelScope.launch {
-            authManager.bootstrap(defaultAdminPassword)
+            /*
+             * `catch` هنا ليس ترفاً: الحالة الابتدائية `Loading`، ولو خرج
+             * الاستثناء من الزرع لبقي المستخدم أمام دوّار لا ينتهي أبداً
+             * بلا رسالة ولا مخرج. الفشل يجب أن يهبط إلى شاشة دخول.
+             */
+            runCatching { authManager.bootstrap(defaultAdminPassword) }
+                .onFailure { authManager.signOut() }
             _ui.value = _ui.value.copy(isBootstrapping = false)
         }
     }
