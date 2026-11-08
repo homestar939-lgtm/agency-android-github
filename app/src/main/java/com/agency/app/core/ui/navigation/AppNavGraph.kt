@@ -63,6 +63,16 @@ import com.agency.app.feature_warehouse.WarehouseProductsScreen
 import com.agency.app.feature_warehouse.WarehouseProductsViewModel
 import com.agency.app.feature_warehouse.WarehouseScanScreen
 import com.agency.app.feature_warehouse.WarehouseScanViewModel
+import com.agency.app.feature_warehouse.InvoiceViewerScreen
+import com.agency.app.feature_warehouse.InvoiceViewerViewModel
+import com.agency.app.feature_warehouse.StockAlertsScreen
+import com.agency.app.feature_warehouse.StockAlertsViewModel
+import com.agency.app.feature_warehouse.StockMovementScreen
+import com.agency.app.feature_warehouse.StockMovementViewModel
+import com.agency.app.feature_warehouse.WarehouseInvoicesScreen
+import com.agency.app.feature_warehouse.WarehouseInvoicesViewModel
+import com.agency.app.feature_warehouse.WarehouseStatsScreen
+import com.agency.app.feature_warehouse.WarehouseStatsViewModel
 
 /**
  * جذر التطبيق.
