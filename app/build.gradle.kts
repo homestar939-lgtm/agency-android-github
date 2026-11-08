@@ -113,6 +113,7 @@ dependencies {
     implementation(libs.camera.view)
     implementation(libs.mlkit.barcode)
     implementation(libs.androidx.biometric)
+    implementation(libs.androidx.fragment.ktx)
 
     // --- Unit tests ---
     testImplementation(libs.junit4)

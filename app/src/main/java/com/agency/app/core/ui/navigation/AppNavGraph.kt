@@ -28,8 +28,20 @@ import com.agency.app.feature_buyer.CartViewModel
 import com.agency.app.feature_buyer.CatalogViewModel
 import com.agency.app.feature_buyer.OrderTrackingViewModel
 import com.agency.app.feature_buyer.ProductDetailViewModel
+import com.agency.app.feature_cashier.CashierCollectScreen
+import com.agency.app.feature_cashier.CashierInvoiceDetailScreen
+import com.agency.app.feature_cashier.CashierInvoiceDetailViewModel
+import com.agency.app.feature_cashier.CashierInvoicesScreen
+import com.agency.app.feature_cashier.CashierInvoicesViewModel
+import com.agency.app.feature_cashier.CollectViewModel
 import com.agency.app.feature_home.DashboardScreen
 import com.agency.app.feature_home.DashboardViewModel
+import com.agency.app.feature_warehouse.WarehouseOrderDetailScreen
+import com.agency.app.feature_warehouse.WarehouseOrderDetailViewModel
+import com.agency.app.feature_warehouse.WarehouseOrdersScreen
+import com.agency.app.feature_warehouse.WarehouseOrdersViewModel
+import com.agency.app.feature_warehouse.WarehouseProductsScreen
+import com.agency.app.feature_warehouse.WarehouseProductsViewModel
 
 /**
  * جذر التطبيق.
@@ -80,6 +92,10 @@ private fun LoginHost(viewModel: LoginViewModel) {
  *
  * كل شاشة تُجلب لها ViewModel الخاصة عبر `hiltViewModel()` فتُحقن
  * مستودعاتها تلقائياً، ولا تُنشأ أي تبعية يدوياً في الواجهة.
+ *
+ * المسارات المُعرَّفة في `Route` تُسجَّل هنا كاملةً حتى لو لم يُعرض مدخلها
+ * لكل دور: الفتح المباشر من لوحة دور آخر يرفضه مخطط البيانات لا يُسقط التطبيق،
+ * لكن غياب التسجيل كان يُسقطه — لذلك اكتمال التسجيل شرط سلامة لا رفاهية.
  */
 @Composable
 private fun AppNavHost(
@@ -156,6 +172,67 @@ private fun AppNavHost(
 
         composable<Route.BuyerStatement> {
             BuyerStatementScreen(viewModel = hiltViewModel())
+        }
+
+        /* ------------------------------ المخزن ------------------------------ */
+
+        composable<Route.WarehouseOrders> {
+            val viewModel: WarehouseOrdersViewModel = hiltViewModel()
+            WarehouseOrdersScreen(
+                viewModel = viewModel,
+                onOpenOrder = { orderId -> navController.navigate(Route.WarehouseOrderDetail(orderId)) },
+            )
+        }
+
+        composable<Route.WarehouseOrderDetail> {
+            val viewModel: WarehouseOrderDetailViewModel = hiltViewModel()
+            WarehouseOrderDetailScreen(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+            )
+        }
+
+        composable<Route.WarehouseProducts> {
+            val viewModel: WarehouseProductsViewModel = hiltViewModel()
+            WarehouseProductsScreen(viewModel = viewModel)
+        }
+
+        /* --------------------------- أمين الصندوق --------------------------- */
+
+        composable<Route.CashierInvoices> {
+            val viewModel: CashierInvoicesViewModel = hiltViewModel()
+            CashierInvoicesScreen(
+                viewModel = viewModel,
+                onOpenInvoice = { invoiceId ->
+                    navController.navigate(Route.CashierInvoiceDetail(invoiceId))
+                },
+            )
+        }
+
+        composable<Route.CashierInvoiceDetail> {
+            val viewModel: CashierInvoiceDetailViewModel = hiltViewModel()
+            CashierInvoiceDetailScreen(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+            )
+        }
+
+        composable<Route.CashierCollect> {
+            val viewModel: CollectViewModel = hiltViewModel()
+            CashierCollectScreen(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+            )
+        }
+
+        composable<Route.CashierCollectFor> {
+            val viewModel: CollectViewModel = hiltViewModel()
+            val buyerId = it.arguments?.getString("buyerId")
+            CashierCollectScreen(
+                viewModel = viewModel,
+                initialBuyerId = buyerId,
+                onBack = { navController.popBackStack() },
+            )
         }
     }
 }

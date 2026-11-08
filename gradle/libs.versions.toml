@@ -18,6 +18,7 @@ coil = "2.5.0"
 camera = "1.3.1"
 mlkitBarcode = "17.2.0"
 biometric = "1.2.0-alpha05"
+fragmentKtx = "1.6.2"
 junit4 = "4.13.2"
 turbine = "1.0.0"
 mockk = "1.13.10"
@@ -75,6 +76,7 @@ camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = 
 camera-view = { module = "androidx.camera:camera-view", version.ref = "camera" }
 mlkit-barcode = { module = "com.google.mlkit:barcode-scanning", version.ref = "mlkitBarcode" }
 androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
+androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 
 # Test
 junit4 = { module = "junit:junit", version.ref = "junit4" }
